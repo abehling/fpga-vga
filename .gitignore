@@ -1,0 +1,4 @@
+*.bin
+*.asc
+*_tb
+*_tb.vcd
