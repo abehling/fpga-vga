@@ -38,7 +38,7 @@ module vga (clk, reset, out, hsync, vsync);
             begin
               // Now we are in the visible area
               // Pixel Format is RGB444
-              // Draw alternating red and blue columns
+              // Draw something
               if (counterH % 8 < 4 && counterV % 8 < 4)
                 out <= 12'b000011110000;
               else if (counterH % 8 > 4 && counterV % 8 > 4) 
