@@ -1,4 +1,5 @@
 *.bin
 *.asc
+*.json
 *_tb
 *_tb.vcd
