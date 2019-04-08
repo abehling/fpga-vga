@@ -19,7 +19,7 @@ module vga_tb;
     #10 reset = 1'b0;
     #200;
     reset = 1'b1;
-    #200000000;
+    #25000000;
     $finish;
   end
 
