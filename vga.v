@@ -38,7 +38,22 @@ module vga (clk, reset, out, hsync, vsync);
         end
       else 
         begin
-          if (counterH > H_FP+H_VSYNC+H_BP && counterH < H_MAX && counterV > V_FP+V_VSYNC+V_BP && counterV < V_MAX)
+
+          // Counter
+          if (counterH == H_MAX)
+            begin
+              // Line ends
+              counterH <= 0;
+              counterV <= counterV + 1;
+            end
+          else
+            counterH <= counterH + 1;
+
+          if (counterV == V_MAX)
+            counterV <= 0;
+
+          // Drawing stuff
+          if (counterH < SCREEN_WIDTH-1 && counterV < SCREEN_HEIGHT-1)
             begin
               // Visible area: Draw a pattern
               if (counterV % 16 < 8)
@@ -57,29 +72,20 @@ module vga (clk, reset, out, hsync, vsync);
                  end
             end
           else
+            // Out of drawing area, so out is set to 0
             out <= 12'b00000000000;
-          if (counterH == H_FP)
-            // hsync pulse starts
+
+          // Sync pulses
+          if (counterH == SCREEN_WIDTH+H_FP)
             hsync <= ~H_POL;
-          if (counterH == H_FP+H_SYNC)
-            // hsync pulse ends
+          if (counterH == SCREEN_WIDTH+H_FP+H_SYNC)
             hsync <= H_POL;
-          if (counterH == H_MAX)
-            begin
-              // Line ends
-              counterH <= 0;
-              counterV <= counterV + 1;
-            end
-          else
-            counterH <= counterH + 1;
-          if (counterV == V_FP)
-            // vsync pulse starts
+
+          if (counterV == SCREEN_HEIGHT+V_FP)
             vsync <= ~V_POL;
-          if (counterV == V_FP+V_SYNC)
-            // vsync pulse ends
+          if (counterV == SCREEN_HEIGHT+V_FP+V_SYNC)
             vsync <= V_POL;
-          if (counterV == V_MAX)
-            counterV <= 0;
+
         end
     end
 endmodule
