@@ -1,17 +1,17 @@
 `timescale 1ns/1ns
 module vga_tb;
-  reg clk, reset;
-  wire [11:0] out;
+  reg clk25, reset;
+  wire [11:0] rgb_out;
   wire hsync;
   wire vsync;
 
-  top_vga display (clk, out, hsync, vsync);
+  vga display_controller(clk25, reset, rgb_out, hsync, vsync);
 
   initial begin
     $dumpfile("vga_tb.vcd");
     $dumpvars(0, vga_tb);
 
-    clk = 1'b0;
+    clk25 = 1'b0;
     reset = 1'b1;
     #10 reset = 1'b0;
     #200;
@@ -23,7 +23,7 @@ module vga_tb;
     $finish;
   end
 
-  // 100MHz Clock -> Timescale 1ns/1ns
-  always #5 clk = ~clk;
+  // 25MHz Pixelclock -> Timescale 1ns/1ns
+  always #20 clk25 = ~clk25;
 
 endmodule
